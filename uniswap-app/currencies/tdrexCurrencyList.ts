@@ -1,3 +1,5 @@
+// TODO -> Change addresses to Tdrex token addresses after deploy
+
 export const tdrexAssetsData: any[] = [
   {
     chainId: 1,
