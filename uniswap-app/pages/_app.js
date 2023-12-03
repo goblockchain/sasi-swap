@@ -12,6 +12,7 @@ import {
 
 import { chain, configureChains, createClient, WagmiConfig } from "wagmi";
 import { infuraProvider } from "wagmi/providers/infura";
+import { Providers } from "../provider";
 
 const { chains, provider } = configureChains(
   [chain.polygonMumbai],
@@ -45,7 +46,9 @@ function MyApp({ Component, pageProps }) {
   return (
     <WagmiConfig client={wagmiClient}>
       <RainbowKitProvider chains={chains} theme={myTheme}>
-        <Component {...pageProps} />
+        <Providers>
+          <Component {...pageProps} />
+        </Providers>
       </RainbowKitProvider>
     </WagmiConfig>
   );

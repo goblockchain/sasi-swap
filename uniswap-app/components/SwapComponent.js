@@ -14,10 +14,12 @@ import toast, { Toaster } from "react-hot-toast";
 import { DEFAULT_VALUE, ETH } from "../utils/SupportedCoins";
 import { toEth, toWei } from "../utils/ether-utils";
 import { useAccount } from "wagmi";
-import { TDREX_SYMBOL_ENUM } from "../currencies/tdrexCurrencyLogos";
+import { tdrexCurrencies } from "../currencies/tdrexCurrencyList";
 
 export const SwapComponent = () => {
-  const [srcToken, setSrcToken] = useState(TDREX_SYMBOL_ENUM.TP26);
+  const [srcToken, setSrcToken] = useState(
+    tdrexCurrencies.find((item) => item.symbol === "TS26")
+  );
   const [destToken, setDestToken] = useState(DEFAULT_VALUE);
 
   const [inputValue, setInputValue] = useState();
@@ -78,7 +80,9 @@ export const SwapComponent = () => {
     )
       populateOutputValue(inputValue);
 
-    setSrcTokenComp(<SwapField obj={srcTokenObj} ref={inputValueRef} />);
+    setSrcTokenComp(
+      <SwapField obj={srcTokenObj} ref={inputValueRef} variant="titles" />
+    );
 
     if (inputValue?.length === 0) setOutputValue("");
   }, [inputValue, destToken]);
@@ -91,7 +95,9 @@ export const SwapComponent = () => {
     )
       populateInputValue(outputValue);
 
-    setDestTokenComp(<SwapField obj={destTokenObj} ref={outputValueRef} />);
+    setDestTokenComp(
+      <SwapField obj={destTokenObj} ref={outputValueRef} variant="cbdcs" />
+    );
 
     if (outputValue?.length === 0) setInputValue("");
 

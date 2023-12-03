@@ -169,3 +169,5 @@ export const tdrexCBDCsData: any[] = [
     },
   },
 ];
+
+export const tdrexCurrencies = [...tdrexAssetsData, ...tdrexCBDCsData];

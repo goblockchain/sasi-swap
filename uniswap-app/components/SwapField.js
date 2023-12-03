@@ -1,8 +1,19 @@
 import React from "react";
 import { Selector } from "./Selector";
+import {
+  tdrexAssetsData,
+  tdrexCBDCsData,
+} from "../currencies/tdrexCurrencyList";
 
-export const SwapField = React.forwardRef(({ obj }, inputRef) => {
+export const SwapField = React.forwardRef(({ obj, variant }, inputRef) => {
   const { id, value = "", setValue, defaultValue, setToken, ignoreValue } = obj;
+
+  const currenciesMap = {
+    titles: tdrexAssetsData,
+    cbdcs: tdrexCBDCsData,
+  };
+
+  const currencies = currenciesMap?.[variant];
 
   return (
     <div className="flex items-center rounded-xl">
@@ -22,6 +33,7 @@ export const SwapField = React.forwardRef(({ obj }, inputRef) => {
         setToken={setToken}
         defaultValue={defaultValue}
         ignoreValue={ignoreValue}
+        currencies={currencies}
       />
     </div>
   );

@@ -1,34 +1,34 @@
 import React, { useEffect, useState } from "react";
 
-import { Dropdown, Image } from "@nextui-org/react";
 import {
-  COINA,
-  COINB,
-  COINC,
-  DEFAULT_VALUE,
-  ETH,
-} from "../utils/SupportedCoins";
-import {
-  tdrexAssetsData,
-  tdrexCBDCsData,
-} from "../currencies/tdrexCurrencyList";
+  Button,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
+} from "@nextui-org/react";
+import { DEFAULT_VALUE } from "../utils/SupportedCoins";
 import { getTdrexCurrencyIcon } from "../currencies/tdrexCurrencyLogos";
 
-export const Selector = ({ defaultValue, ignoreValue, setToken, id }) => {
-  // const menu = [
-  //   { key: ETH, name: ETH },
-  //   { key: COINA, name: COINA },
-  //   { key: COINB, name: COINB },
-  //   { key: COINC, name: COINC },
-  // ];
-
-  const menu = [...tdrexAssetsData, ...tdrexCBDCsData];
+export const Selector = ({
+  defaultValue,
+  ignoreValue,
+  setToken,
+  id,
+  currencies,
+}) => {
+  const menu = currencies?.map((item) => ({ ...item, key: item.symbol }));
 
   const [selectedItem, setSelectedItem] = useState();
   const [menuItems, setMenuItems] = useState(getFilteredItems(ignoreValue));
 
   function getFilteredItems(ignoreValue) {
-    return menu.filter((item) => item["symbol"] !== ignoreValue);
+    return menu?.filter((item) => {
+      if (typeof ignoreValue === "string") {
+        return item["symbol"] !== ignoreValue;
+      }
+      return item["symbol"] !== ignoreValue?.symbol;
+    });
   }
 
   useEffect(() => {
@@ -40,33 +40,67 @@ export const Selector = ({ defaultValue, ignoreValue, setToken, id }) => {
   }, [ignoreValue]);
 
   return (
-    <Dropdown>
-      <Dropdown.Button
-        css={{
-          backgroundColor:
-            selectedItem === DEFAULT_VALUE ? "#2172e5" : "#2c2f36",
-        }}
-      >
-        {selectedItem}
-      </Dropdown.Button>
-      <Dropdown.Menu
+    <Dropdown showArrow>
+      <DropdownTrigger>
+        <Button
+          color={selectedItem === DEFAULT_VALUE ? "primary" : "default"}
+          variant="solid"
+        >
+          <div className="flex items-center gap-1">
+            {selectedItem?.symbol && (
+              <div
+                style={{
+                  backgroundImage: `url(${getTdrexCurrencyIcon(
+                    selectedItem?.symbol
+                  )})`,
+                  backgroundRepeat: "no-repeat",
+                  backgroundPosition: "center",
+                  backgroundSize: "contain",
+                  width: "24px",
+                  height: "24px",
+                  marginRight: "8px",
+                  borderRadius: "50%",
+                  flexShrink: 0,
+                }}
+              />
+            )}
+            <p className="whitespace-nowrap">
+              {selectedItem?.symbol ?? selectedItem}
+            </p>
+          </div>
+        </Button>
+      </DropdownTrigger>
+      <DropdownMenu
+        variant="solid"
+        color="default"
         aria-label="Dynamic Actions"
         items={menuItems}
-        onAction={(key) => {
-          setSelectedItem(key);
-          setToken(key);
+        onAction={(symbol) => {
+          const item = menuItems.find((item) => item.symbol === symbol);
+          setSelectedItem(item);
+          setToken(item);
         }}
       >
         {(item) => (
-          <Dropdown.Item
-            aria-label={id}
-            key={item.symbol}
-            color={item.symbol === "delete" ? "error" : "default"}
-          >
-            {item.name}
-          </Dropdown.Item>
+          <DropdownItem aria-label={id} key={item.symbol}>
+            <div className="flex items-center gap-1">
+              <div
+                style={{
+                  backgroundImage: `url(${getTdrexCurrencyIcon(item?.symbol)})`,
+                  backgroundRepeat: "no-repeat",
+                  backgroundPosition: "center",
+                  backgroundSize: "contain",
+                  width: "24px",
+                  height: "24px",
+                  marginRight: "8px",
+                  borderRadius: "50%",
+                }}
+              />
+              <p style={{ color: "#000" }}>{item.name}</p>
+            </div>
+          </DropdownItem>
         )}
-      </Dropdown.Menu>
+      </DropdownMenu>
     </Dropdown>
   );
 };
