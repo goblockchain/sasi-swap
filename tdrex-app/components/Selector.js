@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 
 import {
   Button,
@@ -20,8 +20,6 @@ export const Selector = ({
   const menu = currencies?.map((item) => ({ ...item, key: item.symbol }));
 
   const [selectedItem, setSelectedItem] = useState();
-  const [menuItems, setMenuItems] = useState(getFilteredItems(ignoreValue));
-
   const getFilteredItems = useCallback(
     (ignoreValue) => {
       return menu?.filter((item) => {
@@ -33,6 +31,8 @@ export const Selector = ({
     },
     [menu]
   );
+
+  const [menuItems, setMenuItems] = useState(getFilteredItems(ignoreValue));
 
   useEffect(() => {
     setSelectedItem(defaultValue);

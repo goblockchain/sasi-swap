@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import {
   getTokenAddress,
   getTokenBalance,
@@ -17,32 +17,46 @@ import {
 export const TokenBalance = ({ name, walletAddress }) => {
   const [balance, setBalance] = useState("-");
   const [tokenAddress, setTokenAddress] = useState();
-
   const [copyIcon, setCopyIcon] = useState({ icon: ClipboardIcon });
-
   const [txPending, setTxPending] = useState(false);
 
-  const notifyError = (msg) => toast.error(msg, { duration: 6000 });
-  const notifySuccess = () => toast.success("Transaction completed.");
+  const notifyError = useCallback(
+    (msg) => toast.error(msg, { duration: 6000 }),
+    []
+  );
+
+  const notifySuccess = useCallback(
+    () => toast.success("Transaction completed."),
+    []
+  );
+
+  const fetchTokenBalance = useCallback(async () => {
+    if (name && walletAddress) {
+      try {
+        const bal = await getTokenBalance(name, walletAddress);
+        const fBal = ethers.utils.formatUnits(bal.toString(), 18);
+        setBalance(fBal.toString());
+      } catch (error) {
+        notifyError("Error fetching token balance");
+      }
+    } else {
+      setBalance("-");
+    }
+  }, [name, walletAddress, notifyError]);
+
+  const fetchTokenAddress = useCallback(async () => {
+    try {
+      const address = await getTokenAddress(name);
+      setTokenAddress(address);
+    } catch (error) {
+      notifyError("Error fetching token address");
+    }
+  }, [name, notifyError]);
 
   useEffect(() => {
-    if (name && walletAddress) {
-      fetchTokenBalance();
-      fetchTokenAddress();
-    } else setBalance("-");
-  }, [name, walletAddress, fetchTokenBalance, fetchTokenAddress]);
-
-  async function fetchTokenBalance() {
-    const bal = await getTokenBalance(name, walletAddress);
-
-    const fBal = ethers.utils.formatUnits(bal.toString(), 18);
-    setBalance(fBal.toString());
-  }
-
-  async function fetchTokenAddress() {
-    const address = await getTokenAddress(name);
-    setTokenAddress(address);
-  }
+    fetchTokenBalance();
+    fetchTokenAddress();
+  }, [fetchTokenBalance, fetchTokenAddress]);
 
   return (
     <div className="flex mx-2">

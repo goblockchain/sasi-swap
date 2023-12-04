@@ -1,4 +1,10 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, {
+  useEffect,
+  useState,
+  useRef,
+  useCallback,
+  useMemo,
+} from "react";
 import {
   hasValidAllowance,
   increaseAllowance,
@@ -35,23 +41,29 @@ export const SwapComponent = () => {
   const CONNECT_WALLET = "Connect wallet";
   const SWAP = "Swap";
 
-  const srcTokenObj = {
-    id: "srcToken",
-    value: inputValue,
-    setValue: setInputValue,
-    defaultValue: srcToken,
-    ignoreValue: destToken,
-    setToken: setSrcToken,
-  };
+  const srcTokenObj = useMemo(
+    () => ({
+      id: "srcToken",
+      value: inputValue,
+      setValue: setInputValue,
+      defaultValue: srcToken,
+      ignoreValue: destToken,
+      setToken: setSrcToken,
+    }),
+    [inputValue, setInputValue, srcToken, destToken]
+  );
 
-  const destTokenObj = {
-    id: "destToken",
-    value: outputValue,
-    setValue: setOutputValue,
-    defaultValue: destToken,
-    ignoreValue: srcToken,
-    setToken: setDestToken,
-  };
+  const destTokenObj = useMemo(
+    () => ({
+      id: "destToken",
+      value: outputValue,
+      setValue: setOutputValue,
+      defaultValue: destToken,
+      ignoreValue: srcToken,
+      setToken: setDestToken,
+    }),
+    [outputValue, setOutputValue, destToken, srcToken]
+  );
 
   const [srcTokenComp, setSrcTokenComp] = useState();
   const [destTokenComp, setDestTokenComp] = useState();
@@ -63,6 +75,50 @@ export const SwapComponent = () => {
   const notifySuccess = () => toast.success("Transaction completed.");
 
   const { address } = useAccount();
+
+  const populateOutputValue = useCallback(() => {
+    if (
+      destToken === DEFAULT_VALUE ||
+      srcToken === DEFAULT_VALUE ||
+      !inputValue
+    )
+      return;
+
+    try {
+      if (srcToken !== ETH && destToken !== ETH) setOutputValue(inputValue);
+      else if (srcToken === ETH && destToken !== ETH) {
+        const outValue = toEth(toWei(inputValue), 14);
+        setOutputValue(outValue);
+      } else if (srcToken !== ETH && destToken === ETH) {
+        const outValue = toEth(toWei(inputValue, 14));
+        setOutputValue(outValue);
+      }
+    } catch (error) {
+      setOutputValue("0");
+    }
+  }, [srcToken, destToken, inputValue, setOutputValue]);
+
+  const populateInputValue = useCallback(() => {
+    if (
+      destToken === DEFAULT_VALUE ||
+      srcToken === DEFAULT_VALUE ||
+      !outputValue
+    )
+      return;
+
+    try {
+      if (srcToken !== ETH && destToken !== ETH) setInputValue(outputValue);
+      else if (srcToken === ETH && destToken !== ETH) {
+        const outValue = toEth(toWei(outputValue, 14));
+        setInputValue(outValue);
+      } else if (srcToken !== ETH && destToken === ETH) {
+        const outValue = toEth(toWei(outputValue), 14);
+        setInputValue(outValue);
+      }
+    } catch (error) {
+      setInputValue("0");
+    }
+  }, [srcToken, destToken, outputValue, setInputValue]);
 
   useEffect(() => {
     // Handling the text of the submit button
@@ -103,7 +159,7 @@ export const SwapComponent = () => {
 
     // Resetting the isReversed value if its set
     if (isReversed.current) isReversed.current = false;
-  }, [outputValue, srcToken, populateOutputValue, , destTokenObj]);
+  }, [outputValue, srcToken, populateInputValue, destTokenObj]);
 
   return (
     <div className="bg-zinc-900 w-[35%] p-4 px-6 rounded-xl">
@@ -187,50 +243,6 @@ export const SwapComponent = () => {
         : " bg-blue-700";
     className += swapBtnText === INCREASE_ALLOWANCE ? " bg-yellow-600" : "";
     return className;
-  }
-
-  function populateOutputValue() {
-    if (
-      destToken === DEFAULT_VALUE ||
-      srcToken === DEFAULT_VALUE ||
-      !inputValue
-    )
-      return;
-
-    try {
-      if (srcToken !== ETH && destToken !== ETH) setOutputValue(inputValue);
-      else if (srcToken === ETH && destToken !== ETH) {
-        const outValue = toEth(toWei(inputValue), 14);
-        setOutputValue(outValue);
-      } else if (srcToken !== ETH && destToken === ETH) {
-        const outValue = toEth(toWei(inputValue, 14));
-        setOutputValue(outValue);
-      }
-    } catch (error) {
-      setOutputValue("0");
-    }
-  }
-
-  function populateInputValue() {
-    if (
-      destToken === DEFAULT_VALUE ||
-      srcToken === DEFAULT_VALUE ||
-      !outputValue
-    )
-      return;
-
-    try {
-      if (srcToken !== ETH && destToken !== ETH) setInputValue(outputValue);
-      else if (srcToken === ETH && destToken !== ETH) {
-        const outValue = toEth(toWei(outputValue, 14));
-        setInputValue(outValue);
-      } else if (srcToken !== ETH && destToken === ETH) {
-        const outValue = toEth(toWei(outputValue), 14);
-        setInputValue(outValue);
-      }
-    } catch (error) {
-      setInputValue("0");
-    }
   }
 
   async function performSwap() {
