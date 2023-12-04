@@ -7,6 +7,7 @@ import { useAccount } from "wagmi";
 
 import toast, { Toaster } from "react-hot-toast";
 import { NavItems } from "./NavItems";
+import Image from "next/image";
 
 export const Header = () => {
   const [tokenBalComp, setTokenBalComp] = useState();

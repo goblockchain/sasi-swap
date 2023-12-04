@@ -22,14 +22,17 @@ export const Selector = ({
   const [selectedItem, setSelectedItem] = useState();
   const [menuItems, setMenuItems] = useState(getFilteredItems(ignoreValue));
 
-  function getFilteredItems(ignoreValue) {
-    return menu?.filter((item) => {
-      if (typeof ignoreValue === "string") {
-        return item["symbol"] !== ignoreValue;
-      }
-      return item["symbol"] !== ignoreValue?.symbol;
-    });
-  }
+  const getFilteredItems = useCallback(
+    (ignoreValue) => {
+      return menu?.filter((item) => {
+        if (typeof ignoreValue === "string") {
+          return item["symbol"] !== ignoreValue;
+        }
+        return item["symbol"] !== ignoreValue?.symbol;
+      });
+    },
+    [menu]
+  );
 
   useEffect(() => {
     setSelectedItem(defaultValue);
