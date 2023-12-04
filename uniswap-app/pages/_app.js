@@ -18,14 +18,14 @@ const { chains, provider } = configureChains(
   [chain.polygonMumbai],
   [
     infuraProvider({
-      apiKey: "f0267a8d7d5642caa8735db53507eefd",
+      apiKey: "0dda5fca764940a89e89bbf434874226",
       priority: 1,
     }),
   ]
 );
 
 const { connectors } = getDefaultWallets({
-  appName: "Custom Dex",
+  appName: "Tdrex",
   chains,
 });
 

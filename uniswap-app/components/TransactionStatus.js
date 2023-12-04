@@ -1,7 +1,5 @@
 import { Fragment, useRef, useState } from "react";
 
-import { Loading } from "@nextui-org/react";
-
 import { Dialog, Transition } from "@headlessui/react";
 
 export const TransactionStatus = ({}) => {
@@ -9,16 +7,17 @@ export const TransactionStatus = ({}) => {
 
   // To prevent closing of the dialog
   function handleClose() {
-    setOpen(true);
+    setOpen(false);
   }
 
   return (
-    <Transition.Root show={open} as={Fragment}>
-      <Dialog
-        as="div"
-        className="fixed z-[99999] inset-0 overflow-y-auto"
-        onClose={handleClose}
-      >
+    <Dialog
+      as="div"
+      className="fixed z-[99999] inset-0 overflow-y-auto"
+      onClose={handleClose}
+      open={open}
+    >
+      <Transition.Root show={open} as={Fragment}>
         <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
           <Transition.Child
             as={Fragment}
@@ -50,7 +49,7 @@ export const TransactionStatus = ({}) => {
           >
             <div className="status inline-block align-bottom py-6 bg-white border rounded-lg text-center overflow-hidden shadow-xl transform transition-all md:w-[35%] sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
               <div className="px-4 py-4 items-center justify-center sm:px-6 sm:flex sm:flex-row-reverse">
-                <Loading>Completing the transaction</Loading>
+                <p>Completing the transaction</p>
               </div>
 
               <p className="px-4 py-4 text-black items-center text-sm justify-center sm:px-6 sm:flex sm:flex-row-reverse">
@@ -59,7 +58,7 @@ export const TransactionStatus = ({}) => {
             </div>
           </Transition.Child>
         </div>
-      </Dialog>
-    </Transition.Root>
+      </Transition.Root>
+    </Dialog>
   );
 };
