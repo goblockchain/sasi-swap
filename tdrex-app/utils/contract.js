@@ -1,6 +1,6 @@
 import { ethers } from "ethers";
-import CustomDexABI from "../utils/CustomDex.json";
-import CustomTokenABI from "../utils/CustomToken.json";
+import CustomDexABI from "./CustomDex.json";
+import CustomTokenABI from "./CustomToken.json";
 
 export const tokenContract = async (address) => {
   const provider = new ethers.providers.Web3Provider(window.ethereum);
