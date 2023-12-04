@@ -34,7 +34,11 @@ export const Header = () => {
   return (
     <div className="fixed left-0 top-0 w-full px-8 py-4 flex items-center justify-between">
       <div className="flex items-center">
-        <Image alt="Tdrex Logo" src={tdrexLogo} className="h-12" />
+        <Image
+          alt="Tdrex Logo"
+          src={tdrexLogo}
+          className="h-12 w-12 shrink-0"
+        />
         <NavItems />
       </div>
 
