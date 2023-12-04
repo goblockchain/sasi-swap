@@ -30,7 +30,7 @@ export const TokenBalance = ({ name, walletAddress }) => {
       fetchTokenBalance();
       fetchTokenAddress();
     } else setBalance("-");
-  }, [name, walletAddress]);
+  }, [name, walletAddress, fetchTokenBalance, fetchTokenAddress]);
 
   async function fetchTokenBalance() {
     const bal = await getTokenBalance(name, walletAddress);

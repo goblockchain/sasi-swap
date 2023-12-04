@@ -5,7 +5,7 @@ import {
   tdrexCBDCsData,
 } from "../currencies/tdrexCurrencyList";
 
-export const SwapField = React.forwardRef(({ obj, variant }, inputRef) => {
+const SwapField = React.forwardRef(({ obj, variant }, inputRef) => {
   const { id, value = "", setValue, defaultValue, setToken, ignoreValue } = obj;
 
   const currenciesMap = {
@@ -44,3 +44,8 @@ export const SwapField = React.forwardRef(({ obj, variant }, inputRef) => {
     return className;
   }
 });
+
+// Set display name for the component
+SwapField.displayName = "SwapField";
+
+export { SwapField };

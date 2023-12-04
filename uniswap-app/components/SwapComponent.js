@@ -85,7 +85,7 @@ export const SwapComponent = () => {
     );
 
     if (inputValue?.length === 0) setOutputValue("");
-  }, [inputValue, destToken]);
+  }, [inputValue, destToken, populateOutputValue, srcTokenObj]);
 
   useEffect(() => {
     if (
@@ -103,7 +103,7 @@ export const SwapComponent = () => {
 
     // Resetting the isReversed value if its set
     if (isReversed.current) isReversed.current = false;
-  }, [outputValue, srcToken]);
+  }, [outputValue, srcToken, populateOutputValue, , destTokenObj]);
 
   return (
     <div className="bg-zinc-900 w-[35%] p-4 px-6 rounded-xl">
