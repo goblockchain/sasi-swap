@@ -8,6 +8,7 @@ import {
   RainbowKitProvider,
   darkTheme,
   midnightTheme,
+  lightTheme,
 } from "@rainbow-me/rainbowkit";
 
 import { chain, configureChains, createClient, WagmiConfig } from "wagmi";
@@ -35,9 +36,9 @@ const wagmiClient = createClient({
   provider,
 });
 
-const myTheme = merge(midnightTheme(), {
+const myTheme = merge(lightTheme(), {
   colors: {
-    accentColor: "#18181b",
+    accentColor: "#fff",
     accentColorForeground: "#fff",
   },
 });

@@ -22,7 +22,7 @@ export const Header = () => {
       </div>
 
       <div className="flex">
-        <ConnectButton className="mx-8" accountStatus={"full"} />
+        <ConnectButton className="mx-8 text-zinc-900" accountStatus={"full"} />
       </div>
 
       <Toaster />

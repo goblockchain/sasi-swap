@@ -86,11 +86,20 @@ export const SwapComponent = () => {
       return;
 
     try {
+      const erc1155Id = srcToken?.isERC20
+        ? destToken?.chainId
+        : srcToken?.chainId;
       // Call contract "getAmountOut"
-      const outputValue = await getAmounOut(inputValue, srcToken, destToken);
+      const outputValue = await getAmounOut(
+        inputValue,
+        srcToken?.address,
+        destToken?.address,
+        erc1155Id
+      );
       console.log("outputValue", outputValue);
       setOutputValue(outputValue);
     } catch (error) {
+      console.log("error", error);
       console.log("setting output value to 0");
       setOutputValue("0");
     }
@@ -105,11 +114,21 @@ export const SwapComponent = () => {
       return;
 
     try {
+      const erc1155Id = srcToken?.isERC20
+        ? destToken?.chainId
+        : srcToken?.chainId;
+
       // Call contract "getAmountOut"
-      const inputValue = await getAmounOut(outputValue, destToken, srcToken);
+      const inputValue = await getAmounOut(
+        outputValue,
+        destToken?.address,
+        srcToken?.address,
+        erc1155Id
+      );
       console.log("inputValue", inputValue);
       setInputValue(inputValue);
     } catch (error) {
+      console.log("error", error);
       console.log("setting output value to 0");
       setInputValue("0");
     }
@@ -157,21 +176,20 @@ export const SwapComponent = () => {
   }, [outputValue, srcToken, populateInputValue, destTokenObj]);
 
   return (
-    <div className="bg-zinc-900 w-[35%] p-4 px-6 rounded-xl">
+    <div className="bg-white shadow-lg text-black w-[35%] p-4 px-6 rounded-xl">
       <div className="flex items-center justify-between py-4 px-1">
-        <p>Swap</p>
-        <CogIcon className="h-6" />
+        <b>Swap</b>
       </div>
-      <div className="relative bg-[#212429] p-4 py-6 rounded-xl mb-2 border-[2px] border-transparent hover:border-zinc-600">
+      <div className="relative bg-white shadow-md p-4 py-6 rounded-xl mb-2 border-[2px] border-transparent hover:border-zinc-600">
         {srcTokenComp}
 
         <ArrowSmDownIcon
-          className="absolute left-1/2 -translate-x-1/2 -bottom-6 h-10 p-1 bg-[#212429] border-4 border-zinc-900 text-zinc-300 rounded-xl cursor-pointer hover:scale-110"
+          className="absolute left-1/2 -translate-x-1/2 -bottom-6 h-10 p-1 bg-white shadow-md border-4 border-zinc-100 text-zinc-500 rounded-xl cursor-pointer hover:scale-110"
           onClick={handleReverseExchange}
         />
       </div>
 
-      <div className="bg-[#212429] p-4 py-6 rounded-xl mt-2 border-[2px] border-transparent hover:border-zinc-600">
+      <div className="bg-white shadow-md p-4 py-6 rounded-xl mt-2 border-[2px] border-transparent hover:border-zinc-600">
         {destTokenComp}
       </div>
 
@@ -235,7 +253,7 @@ export const SwapComponent = () => {
     className +=
       swapBtnText === ENTER_AMOUNT || swapBtnText === CONNECT_WALLET
         ? " text-zinc-400 bg-zinc-800 pointer-events-none"
-        : " bg-blue-700";
+        : " bg-green-500 text-white fw-bold";
     className += swapBtnText === INCREASE_ALLOWANCE ? " bg-yellow-600" : "";
     return className;
   }
@@ -255,15 +273,30 @@ export const SwapComponent = () => {
       outputValue
     );
 
-    // TODO -> Check if
-    if (srcToken === ETH && destToken !== ETH)
-      receipt = await swapERC20TokensForERC1155Tokens(inputValue, outputValue, [
-        srcToken,
-        destToken,
-      ]);
-    else if (srcToken !== ETH && destToken === ETH)
-      receipt = await swapERC1155TokensForERC20Tokens(srcToken, inputValue);
-    else receipt = await swapTokenToToken(srcToken, destToken, inputValue);
+    const currentDate = new Date();
+    currentDate.setDate(currentDate.getDate() + 1);
+    const tomorrowTimestamp = currentDate.getTime();
+
+    console.log("tomorrowTimestamp", tomorrowTimestamp);
+    if (srcToken?.isERC20)
+      receipt = await swapERC20TokensForERC1155Tokens(
+        inputValue,
+        outputValue,
+        [srcToken, destToken],
+        destToken?.chainId,
+        address,
+        tomorrowTimestamp
+      );
+    else {
+      receipt = await swapERC1155TokensForERC20Tokens(
+        inputValue,
+        outputValue,
+        [srcToken, destToken],
+        destToken?.chainId,
+        address,
+        tomorrowTimestamp
+      );
+    }
 
     setTxPending(false);
 

@@ -23,8 +23,8 @@ export const contract = async () => {
     const signer = provider.getSigner();
 
     const contractReader = new ethers.Contract(
-      "0xc7a7651483c9a62d6f7b2baa86cd4708fab66017", // TODO -> Change to Tdrex contract address
-      CustomDexABI.abi, // TODO -> Change to Tdrex contract abi
+      "0x94677c4b0716CcaeB0538Fdf5c55f56B3c231A84",
+      CustomDexABI.abi,
       signer
     );
 

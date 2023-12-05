@@ -147,13 +147,31 @@ export async function increaseAllowance(tokenName, amount) {
   }
 }
 
-export async function getAmounOut(amountIn, reserveIn, reserveOut) {
+export async function getAmounOut(amountIn, tokenA, tokenB, erc1155Id) {
+  console.log("amountIn", amountIn);
+  const factoryAddress = "0xaE8f2b07ca4023B6a46d1E39D7ED28Ec6152AD29";
   try {
     const contractObj = await contract();
+    console.log("contractObj", contractObj);
+
+    console.log("tokenA", tokenA, "tokenB", tokenB, "erc1155Id", erc1155Id);
+    const reserves = await contractObj.getReserves(
+      factoryAddress,
+      tokenA,
+      tokenB,
+      erc1155Id
+    );
+    console.log("reserves", reserves);
+
+    const [reserveIn, reserveOut] = reserves;
+
+    console.log("reserveIn", reserveIn);
+    console.log("reserveOut", reserveOut);
+
     const data = await contractObj.getAmountOut(
       toWei(amountIn),
-      toWei(reserveIn),
-      toWei(reserveOut)
+      reserveIn,
+      reserveOut
     );
 
     return data;
