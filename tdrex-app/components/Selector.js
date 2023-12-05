@@ -40,7 +40,7 @@ export const Selector = ({
 
   useEffect(() => {
     setMenuItems(getFilteredItems(ignoreValue));
-  }, [ignoreValue, getFilteredItems]);
+  }, [ignoreValue]);
 
   return (
     <Dropdown showArrow>

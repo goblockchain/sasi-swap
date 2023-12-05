@@ -13,12 +13,24 @@ import { toEth } from "./ether-utils";
  * uint deadline
  *
  */
-export async function swapEthToToken(tokenName, amount) {
+export async function swapERC20TokensForERC1155Tokens(
+  amountIn,
+  amountOut,
+  path,
+  erc1155Id,
+  toAddress,
+  deadline
+) {
   try {
-    let tx = { value: toWei(amount) };
-
     const contractObj = await contract();
-    const data = await contractObj.swapEthToToken(tokenName, tx);
+    const data = await contractObj.swapERC20TokensForERC1155Tokens(
+      toWei(amountIn),
+      toWei(amountOut),
+      path,
+      erc1155Id,
+      toAddress,
+      deadline
+    );
 
     const receipt = await data.wait();
     return receipt;
@@ -59,10 +71,24 @@ export async function hasValidAllowance(owner, tokenName, amount) {
  * uint deadline
  *
  */
-export async function swapTokenToEth(tokenName, amount) {
+export async function swapERC1155TokensForERC20Tokens(
+  amountIn,
+  amountOutMin,
+  path,
+  erc1155Id,
+  toAddress,
+  deadline
+) {
   try {
     const contractObj = await contract();
-    const data = await contractObj.swapTokenToEth(tokenName, toWei(amount));
+    const data = await contractObj.swapERC1155TokensForERC20Tokens(
+      toWei(amountIn),
+      toWei(amountOutMin),
+      path,
+      erc1155Id,
+      toAddress,
+      deadline
+    );
 
     const receipt = await data.wait();
     return receipt;
@@ -116,6 +142,21 @@ export async function increaseAllowance(tokenName, amount) {
 
     const receipt = await data.wait();
     return receipt;
+  } catch (e) {
+    return parseErrorMsg(e);
+  }
+}
+
+export async function getAmounOut(amountIn, reserveIn, reserveOut) {
+  try {
+    const contractObj = await contract();
+    const data = await contractObj.getAmountOut(
+      toWei(amountIn),
+      toWei(reserveIn),
+      toWei(reserveOut)
+    );
+
+    return data;
   } catch (e) {
     return parseErrorMsg(e);
   }

@@ -6,10 +6,11 @@ import React, {
   useMemo,
 } from "react";
 import {
+  getAmounOut,
   hasValidAllowance,
   increaseAllowance,
-  swapEthToToken,
-  swapTokenToEth,
+  swapERC20TokensForERC1155Tokens,
+  swapERC1155TokensForERC20Tokens,
   swapTokenToToken,
 } from "../utils/queries";
 
@@ -76,7 +77,7 @@ export const SwapComponent = () => {
 
   const { address } = useAccount();
 
-  const populateOutputValue = useCallback(() => {
+  const populateOutputValue = useCallback(async () => {
     if (
       destToken === DEFAULT_VALUE ||
       srcToken === DEFAULT_VALUE ||
@@ -85,20 +86,17 @@ export const SwapComponent = () => {
       return;
 
     try {
-      if (srcToken !== ETH && destToken !== ETH) setOutputValue(inputValue);
-      else if (srcToken === ETH && destToken !== ETH) {
-        const outValue = toEth(toWei(inputValue), 14);
-        setOutputValue(outValue);
-      } else if (srcToken !== ETH && destToken === ETH) {
-        const outValue = toEth(toWei(inputValue, 14));
-        setOutputValue(outValue);
-      }
+      // Call contract "getAmountOut"
+      const outputValue = await getAmounOut(inputValue, srcToken, destToken);
+      console.log("outputValue", outputValue);
+      setOutputValue(outputValue);
     } catch (error) {
+      console.log("setting output value to 0");
       setOutputValue("0");
     }
   }, [srcToken, destToken, inputValue, setOutputValue]);
 
-  const populateInputValue = useCallback(() => {
+  const populateInputValue = useCallback(async () => {
     if (
       destToken === DEFAULT_VALUE ||
       srcToken === DEFAULT_VALUE ||
@@ -107,15 +105,12 @@ export const SwapComponent = () => {
       return;
 
     try {
-      if (srcToken !== ETH && destToken !== ETH) setInputValue(outputValue);
-      else if (srcToken === ETH && destToken !== ETH) {
-        const outValue = toEth(toWei(outputValue, 14));
-        setInputValue(outValue);
-      } else if (srcToken !== ETH && destToken === ETH) {
-        const outValue = toEth(toWei(outputValue), 14);
-        setInputValue(outValue);
-      }
+      // Call contract "getAmountOut"
+      const inputValue = await getAmounOut(outputValue, destToken, srcToken);
+      console.log("inputValue", inputValue);
+      setInputValue(inputValue);
     } catch (error) {
+      console.log("setting output value to 0");
       setInputValue("0");
     }
   }, [srcToken, destToken, outputValue, setInputValue]);
@@ -197,17 +192,17 @@ export const SwapComponent = () => {
   );
 
   async function handleSwap() {
-    if (srcToken === ETH && destToken !== ETH) {
-      performSwap();
-    } else {
-      // Check whether there is allowance when the swap deals with tokenToEth/tokenToToken
-      setTxPending(true);
-      const result = await hasValidAllowance(address, srcToken, inputValue);
-      setTxPending(false);
+    // if (srcToken === ETH && destToken !== ETH) {
+    performSwap();
+    // } else {
+    // Check whether there is allowance when the swap deals with tokenToEth/tokenToToken
+    //   setTxPending(true);
+    //   const result = await hasValidAllowance(address, srcToken, inputValue);
+    //   setTxPending(false);
 
-      if (result) performSwap();
-      else handleInsufficientAllowance();
-    }
+    //   if (result) performSwap();
+    //   else handleInsufficientAllowance();
+    // }
   }
 
   async function handleIncreaseAllowance() {
@@ -249,11 +244,25 @@ export const SwapComponent = () => {
     setTxPending(true);
 
     let receipt;
+    console.log(
+      "srcToken",
+      srcToken,
+      "destToken",
+      destToken,
+      "inputValue",
+      inputValue,
+      "outputValue",
+      outputValue
+    );
 
+    // TODO -> Check if
     if (srcToken === ETH && destToken !== ETH)
-      receipt = await swapEthToToken(destToken, inputValue);
+      receipt = await swapERC20TokensForERC1155Tokens(inputValue, outputValue, [
+        srcToken,
+        destToken,
+      ]);
     else if (srcToken !== ETH && destToken === ETH)
-      receipt = await swapTokenToEth(srcToken, inputValue);
+      receipt = await swapERC1155TokensForERC20Tokens(srcToken, inputValue);
     else receipt = await swapTokenToToken(srcToken, destToken, inputValue);
 
     setTxPending(false);

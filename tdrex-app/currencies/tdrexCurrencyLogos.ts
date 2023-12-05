@@ -13,11 +13,11 @@ export enum TDREX_SYMBOL_ENUM {
   TP29 = "TP29",
   TS26 = "TS26",
   TS29 = "TS29",
-  DREX = "DREX",
-  COL = "COL",
-  HKG = "HKG",
-  JPY = "JPY",
-  URY = "URY",
+  TDREX = "TDREX",
+  TDCOL = "TDCOL",
+  // TDHK = "TDHK",
+  TDJP = "TDJP",
+  TDUR = "TDUR",
 }
 
 const tdrexCurrencyLogosMap = {
@@ -25,11 +25,11 @@ const tdrexCurrencyLogosMap = {
   [TDREX_SYMBOL_ENUM.TP29]: "./assets/tdrex-tesouro/TP29.png",
   [TDREX_SYMBOL_ENUM.TS26]: "./assets/tdrex-tesouro/TS26.png",
   [TDREX_SYMBOL_ENUM.TS29]: "./assets/tdrex-tesouro/TS29.png",
-  [TDREX_SYMBOL_ENUM.DREX]: "./assets/tdrex-cbdc/brasil.png",
-  [TDREX_SYMBOL_ENUM.COL]: "./assets/tdrex-cbdc/colombia.png",
-  [TDREX_SYMBOL_ENUM.HKG]: "./assets/tdrex-cbdc/hongKong.png",
-  [TDREX_SYMBOL_ENUM.JPY]: "./assets/tdrex-cbdc/japan.png",
-  [TDREX_SYMBOL_ENUM.URY]: "./assets/tdrex-cbdc/uruguay.png",
+  [TDREX_SYMBOL_ENUM.TDREX]: "./assets/tdrex-cbdc/brasil.png",
+  [TDREX_SYMBOL_ENUM.TDCOL]: "./assets/tdrex-cbdc/colombia.png",
+  // [TDREX_SYMBOL_ENUM.TDHK]: "./assets/tdrex-cbdc/hongKong.png",
+  [TDREX_SYMBOL_ENUM.TDJP]: "./assets/tdrex-cbdc/japan.png",
+  [TDREX_SYMBOL_ENUM.TDUR]: "./assets/tdrex-cbdc/uruguay.png",
 };
 
 export const getTdrexCurrencyIcon = (symbol: TDREX_SYMBOL_ENUM) =>

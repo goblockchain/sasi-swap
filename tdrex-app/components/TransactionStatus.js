@@ -53,7 +53,7 @@ export const TransactionStatus = ({}) => {
               </div>
 
               <p className="px-4 py-4 text-black items-center text-sm justify-center sm:px-6 sm:flex sm:flex-row-reverse">
-                (Would usually take &lt; 10 secs...)
+                Loading...
               </p>
             </div>
           </Transition.Child>

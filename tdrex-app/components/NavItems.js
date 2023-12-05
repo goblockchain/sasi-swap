@@ -3,8 +3,6 @@ import { ArrowSmUpIcon } from "@heroicons/react/outline";
 
 export const NavItems = () => {
   const SWAP = "Swap";
-  const POOL = "Pool";
-  const VOTE = "Vote";
   const CHART = "Charts";
 
   const [selectedNavItem, setSelectedNavItem] = useState(SWAP);
@@ -16,18 +14,6 @@ export const NavItems = () => {
         onClick={() => setSelectedNavItem(SWAP)}
       >
         {SWAP}
-      </p>
-      <p
-        className={getNavIconClassName(POOL)}
-        onClick={() => setSelectedNavItem(POOL)}
-      >
-        {POOL}
-      </p>
-      <p
-        className={getNavIconClassName(VOTE)}
-        onClick={() => setSelectedNavItem(VOTE)}
-      >
-        {VOTE}
       </p>
       <p
         className={getNavIconClassName(CHART)}
