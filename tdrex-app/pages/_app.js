@@ -38,8 +38,8 @@ const wagmiClient = createClient({
 
 const myTheme = merge(lightTheme(), {
   colors: {
-    accentColor: "#fff",
-    accentColorForeground: "#fff",
+    accentColor: "#ooo",
+    accentColorForeground: "#52525b",
   },
 });
 

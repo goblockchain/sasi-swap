@@ -3,7 +3,7 @@ import { ArrowSmUpIcon } from "@heroicons/react/outline";
 
 export const NavItems = () => {
   const SWAP = "Swap";
-  const TOKENS = "Tokens";
+  const HOME = "Home";
 
   const [selectedNavItem, setSelectedNavItem] = useState(SWAP);
 
@@ -16,10 +16,10 @@ export const NavItems = () => {
         {SWAP}
       </p>
       <p
-        className={getNavIconClassName(TOKENS)}
-        onClick={() => window.open("https://info.uniswap.org/#/", "_blank")}
+        className={getNavIconClassName(HOME)}
+        onClick={() => window.open("https://tdrex-home.vercel.app/", "_self")}
       >
-        {TOKENS}
+        {HOME}
         <ArrowSmUpIcon className="h-4 rotate-45" />
       </p>
     </div>

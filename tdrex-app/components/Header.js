@@ -21,8 +21,8 @@ export const Header = () => {
         <NavItems />
       </div>
 
-      <div className="flex">
-        <ConnectButton className="mx-8 text-zinc-900" accountStatus={"full"} />
+      <div className="flex text-zinc-900">
+        <ConnectButton className="mx-8" accountStatus={"full"} />
       </div>
 
       <Toaster />
