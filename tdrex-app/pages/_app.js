@@ -16,7 +16,7 @@ import { infuraProvider } from "wagmi/providers/infura";
 import { Providers } from "../provider";
 
 const { chains, provider } = configureChains(
-  [chain.polygonMumbai],
+  [chain.sepolia],
   [
     infuraProvider({
       apiKey: "0dda5fca764940a89e89bbf434874226",

@@ -19,14 +19,21 @@ export const contract = async () => {
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const { ethereum } = window;
 
+  console.log("provider", provider);
+  console.log("ethereum", ethereum);
+
   if (ethereum) {
     const signer = provider.getSigner();
 
+    console.log("signer", await signer.getAddress());
+
     const contractReader = new ethers.Contract(
-      "0x94677c4b0716CcaeB0538Fdf5c55f56B3c231A84",
+      "0xB437ad6fcb8d101B67d44bf3687083fb117d92eD",
       CustomDexABI.abi,
       signer
     );
+
+    console.log("contractReader", contractReader.connect(signer));
 
     return contractReader;
   }

@@ -6,12 +6,10 @@ import React, {
   useMemo,
 } from "react";
 import {
-  getAmounOut,
-  hasValidAllowance,
   increaseAllowance,
   swapERC20TokensForERC1155Tokens,
   swapERC1155TokensForERC20Tokens,
-  swapTokenToToken,
+  getAmountOut,
 } from "../utils/queries";
 
 import { CogIcon, ArrowSmDownIcon } from "@heroicons/react/outline";
@@ -89,8 +87,7 @@ export const SwapComponent = () => {
       const erc1155Id = srcToken?.isERC20
         ? destToken?.chainId
         : srcToken?.chainId;
-      // Call contract "getAmountOut"
-      const outputValue = await getAmounOut(
+      const outputValue = await getAmountOut(
         inputValue,
         srcToken?.address,
         destToken?.address,
@@ -119,7 +116,7 @@ export const SwapComponent = () => {
         : srcToken?.chainId;
 
       // Call contract "getAmountOut"
-      const inputValue = await getAmounOut(
+      const inputValue = await getAmountOut(
         outputValue,
         destToken?.address,
         srcToken?.address,

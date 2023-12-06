@@ -7,7 +7,7 @@ import { Toaster } from "react-hot-toast";
 import { NavItems } from "./NavItems";
 import Image from "next/image";
 
-import tdrexLogo from "../public/assets/tdrex-logo.png";
+import tdrexLogo from "../public/assets/main_logo.png";
 
 export const Header = () => {
   return (

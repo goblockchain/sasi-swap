@@ -27,7 +27,7 @@ export async function swapERC20TokensForERC1155Tokens(
       toWei(amountIn),
       toWei(amountOut),
       path,
-      erc1155Id,
+      12345,
       toAddress,
       deadline
     );
@@ -85,7 +85,7 @@ export async function swapERC1155TokensForERC20Tokens(
       toWei(amountIn),
       toWei(amountOutMin),
       path,
-      erc1155Id,
+      12345,
       toAddress,
       deadline
     );
@@ -147,9 +147,9 @@ export async function increaseAllowance(tokenName, amount) {
   }
 }
 
-export async function getAmounOut(amountIn, tokenA, tokenB, erc1155Id) {
+export async function getAmountOut(amountIn, tokenA, tokenB, erc1155Id) {
   console.log("amountIn", amountIn);
-  const factoryAddress = "0xaE8f2b07ca4023B6a46d1E39D7ED28Ec6152AD29";
+  const factoryAddress = "0xD10883F33C7DcF5D4eB0E4B823210478c65fB8D1";
   try {
     const contractObj = await contract();
     console.log("contractObj", contractObj);
@@ -157,16 +157,16 @@ export async function getAmounOut(amountIn, tokenA, tokenB, erc1155Id) {
     console.log("tokenA", tokenA, "tokenB", tokenB, "erc1155Id", erc1155Id);
     const reserves = await contractObj.getReserves(
       factoryAddress,
-      tokenA,
-      tokenB,
-      erc1155Id
+      tokenB.trim(),
+      tokenA.trim(),
+      12345
     );
     console.log("reserves", reserves);
 
     const [reserveIn, reserveOut] = reserves;
 
-    console.log("reserveIn", reserveIn);
-    console.log("reserveOut", reserveOut);
+    console.log("reserveIn", toEth(reserveIn));
+    console.log("reserveOut", toEth(reserveOut));
 
     const data = await contractObj.getAmountOut(
       toWei(amountIn),
@@ -174,7 +174,9 @@ export async function getAmounOut(amountIn, tokenA, tokenB, erc1155Id) {
       reserveOut
     );
 
-    return data;
+    console.log("data", data);
+
+    return toEth(data);
   } catch (e) {
     return parseErrorMsg(e);
   }
