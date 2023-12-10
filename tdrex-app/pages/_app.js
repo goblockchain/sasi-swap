@@ -14,23 +14,50 @@ import { infuraProvider } from "wagmi/providers/infura";
 import { Providers } from "../provider";
 import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
 
+export const xrp_ledger = {
+  id: 1440002,
+  name: "XRPL EVM Sidechain",
+  network: "evm-sidechain",
+  nativeCurrency: {
+    decimals: 18,
+    name: "XRP",
+    symbol: "XRP",
+  },
+  rpcUrls: {
+    public: { http: ["https://rpc-evm-sidechain.xrpl.org/"] },
+    default: { http: ["https://rpc-evm-sidechain.xrpl.org/"] },
+  },
+  blockExplorers: {
+    etherscan: {
+      name: "EVM Sidechain Block Explorer",
+      url: "https://evm-sidechain.xrpl.org/",
+    },
+    default: {
+      name: "EVM Sidechain Block Explore",
+      url: "https://evm-sidechain.xrpl.org/",
+    },
+  },
+  contracts: {
+    multicall3: {
+      address: "0xB2F3994FD5B2CCf1Dc63FC05E01B06d376170F3f",
+      blockCreated: 11_907_934,
+    },
+  },
+};
+
 const { chains, provider } = configureChains(
-  [chain.sepolia],
+  [xrp_ledger],
   [
-    infuraProvider({
-      apiKey: "0dda5fca764940a89e89bbf434874226",
-      priority: 1,
-    }),
     jsonRpcProvider({
       rpc: (chain) => ({
-        http: "https://sepolia.infura.io/v3/0dda5fca764940a89e89bbf434874226",
+        http: "https://rpc-evm-sidechain.xrpl.org/",
       }),
     }),
   ]
 );
 
 const { connectors } = getDefaultWallets({
-  appName: "Tdrex",
+  appName: "SaSi Swap",
   chains,
 });
 

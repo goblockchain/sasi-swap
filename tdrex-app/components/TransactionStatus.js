@@ -1,6 +1,7 @@
 import { Fragment, useRef, useState } from "react";
 
 import { Dialog, Transition } from "@headlessui/react";
+import { Spinner } from "@nextui-org/react";
 
 export const TransactionStatus = ({}) => {
   const [open, setOpen] = useState(true);
@@ -48,13 +49,11 @@ export const TransactionStatus = ({}) => {
             leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
           >
             <div className="status inline-block align-bottom py-6 bg-white border rounded-lg text-center overflow-hidden shadow-xl transform transition-all md:w-[35%] sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-              <div className="px-4 py-4 items-center justify-center sm:px-6 sm:flex sm:flex-row-reverse">
-                <p>Completing the transaction</p>
-              </div>
-
-              <p className="px-4 py-4 text-black items-center text-sm justify-center sm:px-6 sm:flex sm:flex-row-reverse">
-                Loading...
-              </p>
+              <Spinner
+                label="Completing transaction..."
+                color="danger"
+                labelColor="danger"
+              />
             </div>
           </Transition.Child>
         </div>

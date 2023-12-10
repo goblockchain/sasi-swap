@@ -2,7 +2,6 @@ import { BigNumber, ethers } from "ethers";
 import { contract, tokenContract } from "./contract";
 import { toEth } from "./ether-utils";
 
-// TODO -> change to swapERC20TokensForERC1155Tokens
 /**
  *
  * uint amountIn,
@@ -21,13 +20,64 @@ export async function swapERC20TokensForERC1155Tokens(
   toAddress,
   deadline
 ) {
+  console.log("swaping erc20 tokens for erc1155 tokens");
+  console.log("amountIn", amountIn);
+  console.log("amountOut", amountOut);
+  console.log("path", path);
+  console.log("erc1155Id", erc1155Id);
+  console.log("toAddress", toAddress);
+  console.log("deadline", deadline);
   try {
     const contractObj = await contract();
     const data = await contractObj.swapERC20TokensForERC1155Tokens(
-      toWei(amountIn),
-      toWei(amountOut),
+      Number(toWei(toEth(amountIn))),
+      0,
       path,
-      12345,
+      1,
+      toAddress,
+      deadline
+    );
+
+    const receipt = await data.wait();
+    return receipt;
+  } catch (e) {
+    return parseErrorMsg(e);
+  }
+}
+
+/**
+ *
+ * uint amountIn,
+ * uint amountOutMin,
+ * address[] calldata path,
+ * uint id, // ERC1155 id.
+ * address to,
+ * uint deadline
+ *
+ */
+export async function swapERC1155TokensForERC20Tokens(
+  amountIn,
+  amountOutMin,
+  path,
+  erc1155Id,
+  toAddress,
+  deadline
+) {
+  try {
+    const contractObj = await contract();
+
+    console.log("swaping erc1155 tokens for erc20 tokens");
+    console.log("amountIn", toWei(amountIn));
+    console.log("amountOutMin", toWei(amountOutMin));
+    console.log("path", path);
+    console.log("erc1155Id", erc1155Id);
+    console.log("toAddress", toAddress);
+    console.log("deadline", deadline);
+    const data = await contractObj.swapERC1155TokensForERC20Tokens(
+      Number(toWei(toEth(amountIn))),
+      0,
+      path,
+      1,
       toAddress,
       deadline
     );
@@ -55,43 +105,6 @@ export async function hasValidAllowance(owner, tokenName, amount) {
     );
 
     return result;
-  } catch (e) {
-    return parseErrorMsg(e);
-  }
-}
-
-// TODO -> change to swapERC1155TokensForERC20Tokens
-/**
- *
- * uint amountIn,
- * uint amountOutMin,
- * address[] calldata path,
- * uint id, // ERC1155 id.
- * address to,
- * uint deadline
- *
- */
-export async function swapERC1155TokensForERC20Tokens(
-  amountIn,
-  amountOutMin,
-  path,
-  erc1155Id,
-  toAddress,
-  deadline
-) {
-  try {
-    const contractObj = await contract();
-    const data = await contractObj.swapERC1155TokensForERC20Tokens(
-      toWei(amountIn),
-      toWei(amountOutMin),
-      path,
-      12345,
-      toAddress,
-      deadline
-    );
-
-    const receipt = await data.wait();
-    return receipt;
   } catch (e) {
     return parseErrorMsg(e);
   }
@@ -149,35 +162,41 @@ export async function increaseAllowance(tokenName, amount) {
 
 export async function getAmountOut(amountIn, tokenA, tokenB, erc1155Id) {
   console.log("amountIn", amountIn);
-  const factoryAddress = "0xD10883F33C7DcF5D4eB0E4B823210478c65fB8D1";
+  const factoryAddress = "0xC6FCCF8Aaa53Ec976483a23388aea068BD7eBcAb";
   try {
     const contractObj = await contract();
+
     console.log("contractObj", contractObj);
 
-    console.log("tokenA", tokenA, "tokenB", tokenB, "erc1155Id", erc1155Id);
-    const reserves = await contractObj.getReserves(
-      factoryAddress,
-      tokenB.trim(),
-      tokenA.trim(),
-      12345
+    // const reserves = await contractObj.getReserves(
+    //   factoryAddress,
+    //   tokenB.trim(),
+    //   tokenA.trim(),
+    //   1
+    // );
+    // console.log("reserves", reserves);
+
+    // const [reserveIn, reserveOut] = reserves;
+
+    // console.log("reserveIn", toEth(reserveIn));
+    // console.log("reserveOut", toEth(reserveOut));
+    console.log(
+      "getamountsOutPayload",
+      JSON.stringify({
+        amountIn: amountIn,
+        id: 1,
+        path: [tokenB, tokenA],
+      })
     );
-    console.log("reserves", reserves);
 
-    const [reserveIn, reserveOut] = reserves;
-
-    console.log("reserveIn", toEth(reserveIn));
-    console.log("reserveOut", toEth(reserveOut));
-
-    const data = await contractObj.getAmountOut(
-      toWei(amountIn),
-      reserveIn,
-      reserveOut
-    );
+    const data = await contractObj.getAmountsOut(amountIn, 1, [tokenB, tokenA]);
 
     console.log("data", data);
+    const [gives, receives] = data;
 
-    return toEth(data);
+    return toEth(toWei(receives));
   } catch (e) {
+    console.log("error", e);
     return parseErrorMsg(e);
   }
 }

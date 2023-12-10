@@ -1,16 +1,13 @@
 import React from "react";
 import { Selector } from "./Selector";
-import {
-  tdrexAssetsData,
-  tdrexCBDCsData,
-} from "../currencies/tdrexCurrencyList";
+import { sasiAssetsData, sasiCBDCsData } from "../currencies/sasiCurrencyList";
 
 const SwapField = React.forwardRef(({ obj, variant }, inputRef) => {
   const { id, value = "", setValue, defaultValue, setToken, ignoreValue } = obj;
 
   const currenciesMap = {
-    titles: tdrexAssetsData,
-    cbdcs: tdrexCBDCsData,
+    titles: sasiAssetsData,
+    cbdcs: sasiCBDCsData,
   };
 
   const currencies = currenciesMap?.[variant];

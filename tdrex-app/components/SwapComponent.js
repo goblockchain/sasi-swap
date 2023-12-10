@@ -19,11 +19,11 @@ import toast, { Toaster } from "react-hot-toast";
 import { DEFAULT_VALUE, ETH } from "../utils/SupportedCoins";
 import { toEth, toWei } from "../utils/ether-utils";
 import { useAccount } from "wagmi";
-import { tdrexCurrencies } from "../currencies/tdrexCurrencyList";
+import { sasiCurrencies } from "../currencies/sasiCurrencyList";
 
 export const SwapComponent = () => {
   const [srcToken, setSrcToken] = useState(
-    tdrexCurrencies.find((item) => item.symbol === "TS26")
+    sasiCurrencies.find((item) => item.symbol === "TS26")
   );
   const [destToken, setDestToken] = useState(DEFAULT_VALUE);
 
@@ -147,8 +147,9 @@ export const SwapComponent = () => {
     )
       populateOutputValue(inputValue);
 
+    const variant = isReversed.current ? "cbdcs" : "titles";
     setSrcTokenComp(
-      <SwapField obj={srcTokenObj} ref={inputValueRef} variant="titles" />
+      <SwapField obj={srcTokenObj} ref={inputValueRef} variant={variant} />
     );
 
     if (inputValue?.length === 0) setOutputValue("");
@@ -162,8 +163,9 @@ export const SwapComponent = () => {
     )
       populateInputValue(outputValue);
 
+    const variant = isReversed.current ? "titles" : "cbdcs";
     setDestTokenComp(
-      <SwapField obj={destTokenObj} ref={outputValueRef} variant="cbdcs" />
+      <SwapField obj={destTokenObj} ref={outputValueRef} variant={variant} />
     );
 
     if (outputValue?.length === 0) setInputValue("");
@@ -235,9 +237,6 @@ export const SwapComponent = () => {
     // being calculated in their respective side - effects
     isReversed.current = true;
 
-    // 1. Swap tokens (srcToken <-> destToken)
-    // 2. Swap values (inputValue <-> outputValue)
-
     setInputValue(outputValue);
     setOutputValue(inputValue);
 
@@ -250,7 +249,7 @@ export const SwapComponent = () => {
     className +=
       swapBtnText === ENTER_AMOUNT || swapBtnText === CONNECT_WALLET
         ? " text-zinc-400 bg-zinc-800 pointer-events-none"
-        : " bg-green-500 text-white fw-bold";
+        : " bg-[#C10000] text-white fw-bold";
     className += swapBtnText === INCREASE_ALLOWANCE ? " bg-yellow-600" : "";
     return className;
   }
@@ -259,27 +258,17 @@ export const SwapComponent = () => {
     setTxPending(true);
 
     let receipt;
-    console.log(
-      "srcToken",
-      srcToken,
-      "destToken",
-      destToken,
-      "inputValue",
-      inputValue,
-      "outputValue",
-      outputValue
-    );
 
     const currentDate = new Date();
     currentDate.setDate(currentDate.getDate() + 1);
     const tomorrowTimestamp = currentDate.getTime();
+    console.log("srcToken", srcToken);
 
-    console.log("tomorrowTimestamp", tomorrowTimestamp);
     if (srcToken?.isERC20)
       receipt = await swapERC20TokensForERC1155Tokens(
         inputValue,
         outputValue,
-        [srcToken, destToken],
+        [srcToken?.address, destToken?.address],
         destToken?.chainId,
         address,
         tomorrowTimestamp
@@ -288,8 +277,8 @@ export const SwapComponent = () => {
       receipt = await swapERC1155TokensForERC20Tokens(
         inputValue,
         outputValue,
-        [srcToken, destToken],
-        destToken?.chainId,
+        [srcToken?.address, destToken?.address],
+        srcToken?.chainId,
         address,
         tomorrowTimestamp
       );

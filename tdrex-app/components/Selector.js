@@ -8,7 +8,7 @@ import {
   DropdownTrigger,
 } from "@nextui-org/react";
 import { DEFAULT_VALUE } from "../utils/SupportedCoins";
-import { getTdrexCurrencyIcon } from "../currencies/tdrexCurrencyLogos";
+import { getSasiCurrencyIcon } from "../currencies/sasiCurrencyLogos";
 
 export const Selector = ({
   defaultValue,
@@ -46,14 +46,16 @@ export const Selector = ({
     <Dropdown showArrow>
       <DropdownTrigger>
         <Button
-          color={selectedItem === DEFAULT_VALUE ? "primary" : "default"}
+          className={`text-white ${
+            selectedItem === DEFAULT_VALUE ? "bg-[#000]" : "bg-[#C10000]"
+          }`}
           variant="solid"
         >
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1  px-5">
             {selectedItem?.symbol && (
               <div
                 style={{
-                  backgroundImage: `url(${getTdrexCurrencyIcon(
+                  backgroundImage: `url(${getSasiCurrencyIcon(
                     selectedItem?.symbol
                   )})`,
                   backgroundRepeat: "no-repeat",
@@ -89,7 +91,7 @@ export const Selector = ({
             <div className="flex items-center gap-1">
               <div
                 style={{
-                  backgroundImage: `url(${getTdrexCurrencyIcon(item?.symbol)})`,
+                  backgroundImage: `url(${getSasiCurrencyIcon(item?.symbol)})`,
                   backgroundRepeat: "no-repeat",
                   backgroundPosition: "center",
                   backgroundSize: "contain",
