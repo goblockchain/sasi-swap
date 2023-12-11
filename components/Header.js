@@ -7,13 +7,13 @@ import { Toaster } from "react-hot-toast";
 import { NavItems } from "./NavItems";
 import Image from "next/image";
 
-import tdrexLogo from "../public/assets/main_logo.png";
+import sasiLogo from "../public/assets/main_logo.png";
 
 export const Header = () => {
   return (
     <div className="fixed left-0 top-0 w-full px-8 py-4 flex items-center justify-between">
       <div className="flex items-center">
-        <Image alt="Tdrex Logo" src={tdrexLogo} className="w-12 shrink-0" />
+        <Image alt="Sasi Swap Logo" src={sasiLogo} className="w-12 shrink-0" />
         <NavItems />
       </div>
 
