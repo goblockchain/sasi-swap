@@ -3,10 +3,11 @@ export enum SASI_SYMBOL_ENUM {
   TP29 = "TP29",
   TS26 = "TS26",
   TS29 = "TS29",
-  DREX = "DREX",
-  TDCOL = "TDCOL",
-  TDJP = "TDJP",
-  TDUR = "TDUR",
+  RD = "RD",
+  COL = "COL",
+  HOK = "HOK",
+  JAP = "JAP",
+  URY = "URY",
 }
 
 const sasiCurrencyLogosMap = {
@@ -14,10 +15,11 @@ const sasiCurrencyLogosMap = {
   [SASI_SYMBOL_ENUM.TP29]: "./assets/sasi-tesouro/TP29.png",
   [SASI_SYMBOL_ENUM.TS26]: "./assets/sasi-tesouro/TS26.png",
   [SASI_SYMBOL_ENUM.TS29]: "./assets/sasi-tesouro/TS29.png",
-  [SASI_SYMBOL_ENUM.DREX]: "./assets/sasi-cbdc/brasil.png",
-  [SASI_SYMBOL_ENUM.TDCOL]: "./assets/sasi-cbdc/colombia.png",
-  [SASI_SYMBOL_ENUM.TDJP]: "./assets/sasi-cbdc/japan.png",
-  [SASI_SYMBOL_ENUM.TDUR]: "./assets/sasi-cbdc/uruguay.png",
+  [SASI_SYMBOL_ENUM.RD]: "./assets/sasi-cbdc/brasil.png",
+  [SASI_SYMBOL_ENUM.COL]: "./assets/sasi-cbdc/colombia.png",
+  [SASI_SYMBOL_ENUM.HOK]: "./assets/sasi-cbdc/hongKong.png",
+  [SASI_SYMBOL_ENUM.JAP]: "./assets/sasi-cbdc/japan.png",
+  [SASI_SYMBOL_ENUM.URY]: "./assets/sasi-cbdc/uruguay.png",
 };
 
 export const getSasiCurrencyIcon = (symbol: SASI_SYMBOL_ENUM) =>
