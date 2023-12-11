@@ -17,7 +17,7 @@ export const NavItems = () => {
       </p>
       <p
         className={getNavIconClassName(HOME)}
-        onClick={() => window.open("https://tdrex-home.vercel.app/", "_self")}
+        onClick={() => window.open("https://sasi-home.vercel.app/", "_self")}
       >
         {HOME}
         <ArrowSmUpIcon className="h-4 rotate-45" />
